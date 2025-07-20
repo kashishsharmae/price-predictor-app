@@ -6,7 +6,7 @@ A machine learning-based web application that predicts the **price of a house** 
 
 ## 🌐 Live App
 
-🔗 [Visit the Live App](https://kashishsharmae-price-predictor-app.streamlit.app)
+🔗 [Visit the Live App](https://prices-predictor-app.streamlit.app/)
 
 > Replace with your actual Streamlit Cloud link after deployment.
 
