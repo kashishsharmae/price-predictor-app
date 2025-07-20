@@ -1,52 +1,88 @@
+# 🏠 Price Predictor App (Streamlit)
 
-import pandas as pd
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-import streamlit as st
+A machine learning web app to predict house prices using key property features. Built with **Python**, **Streamlit**, and **Scikit-learn**.
 
-df = pd.read_csv("housing.csv")
-st.write("### 🧾 Sample Housing Data", df.head())
+---
 
-df['mainroad'] = df['mainroad'].map({'yes': 1, 'no': 0})
-df['guestroom'] = df['guestroom'].map({'yes': 1, 'no': 0})
-df['basement'] = df['basement'].map({'yes': 1, 'no': 0})
-df['hotwaterheating'] = df['hotwaterheating'].map({'yes': 1, 'no': 0})
-df['airconditioning'] = df['airconditioning'].map({'yes': 1, 'no': 0})
+## 📌 Features
+- Predicts house prices based on:
+  - Area (sq ft)
+  - Bedrooms, Bathrooms, Stories
+  - Road access, Guestroom, Basement
+  - Hot water heating, Air Conditioning, Parking
+- ✅ Added **Region** and **Top 25 Expensive Cities** selection
+- Simple, responsive user interface built using **Streamlit**
 
-X = df.drop('price', axis=1)
-y = df['price']
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+---
 
-model = LinearRegression()
-model.fit(X_train, y_train)
+## 📁 Folder Structure
 
-def predict_price(area, bedrooms, bathrooms, stories, mainroad, guestroom, basement, hotwater, ac, parking):
-    input_data = np.array([[area, bedrooms, bathrooms, stories, mainroad, guestroom, basement, hotwater, ac, parking]])
-    prediction = model.predict(input_data)
-    return prediction[0]
+```
+📦 price-predictor-app/
+├── app.py                # Streamlit app UI
+├── train_model.py        # Model training script
+├── model.pkl             # Trained ML model
+├── requirements.txt      # Required libraries
+├── README.md             # Project documentation
+└── housing.csv           # Dataset (you must provide this file)
+```
 
-st.title("🏠 House Price Prediction App")
-st.markdown("Enter the house details to get the predicted price:")
+---
 
-area = st.number_input("Area (sq ft)", min_value=500)
-bedrooms = st.selectbox("Bedrooms", [1, 2, 3, 4, 5])
-bathrooms = st.selectbox("Bathrooms", [1, 2, 3, 4])
-stories = st.selectbox("Stories", [1, 2, 3, 4])
-mainroad = st.radio("Main Road?", ['yes', 'no'])
-guestroom = st.radio("Guest Room?", ['yes', 'no'])
-basement = st.radio("Basement?", ['yes', 'no'])
-hotwater = st.radio("Hot Water Heating?", ['yes', 'no'])
-ac = st.radio("Air Conditioning?", ['yes', 'no'])
-parking = st.slider("Parking Spaces", 0, 3)
+## 🚀 How to Run the App Locally (VS Code or Terminal)
 
-mainroad = 1 if mainroad == 'yes' else 0
-guestroom = 1 if guestroom == 'yes' else 0
-basement = 1 if basement == 'yes' else 0
-hotwater = 1 if hotwater == 'yes' else 0
-ac = 1 if ac == 'yes' else 0
+### 1. Clone the repo or download ZIP
+```bash
+git clone https://github.com/your-username/price-predictor-app.git
+cd price-predictor-app
+```
 
-if st.button("Predict Price"):
-    result = predict_price(area, bedrooms, bathrooms, stories, mainroad, guestroom, basement, hotwater, ac, parking)
-    st.success(f"🏡 Estimated Price: ₹{round(result):,}")
+### 2. (Optional) Create Virtual Environment
+```bash
+python -m venv venv
+venv\Scripts\activate    # Windows
+```
+
+### 3. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Train the Model (if not done)
+```bash
+python train_model.py
+```
+
+### 5. Run the Streamlit App
+```bash
+streamlit run app.py
+```
+
+Go to: [http://localhost:8501](http://localhost:8501) in your browser.
+
+---
+
+## 🌐 Deployed App
+Visit the hosted version:  
+👉 [https://prices-predictor-app.streamlit.app](https://prices-predictor-app.streamlit.app)
+
+---
+
+## 🧠 Tech Stack
+- Python 3.10+
+- Pandas, NumPy
+- Scikit-learn
+- Streamlit
+- Joblib
+
+---
+
+## ✍️ Author
+**Kashish Sharma**  
+🔗 GitHub: [@kashishsharmae](https://github.com/kashishsharmae)
+
+---
+
+## 📄 License
+This project is open-source and free to use for educational purposes.
 
