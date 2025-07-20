@@ -1,52 +1,72 @@
 
+# 📁 Enhanced Price Predictor App with Region and 25 Expensive Cities
+
+import streamlit as st
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-import streamlit as st
+import joblib
 
-df = pd.read_csv("housing.csv")
-st.write("### 🧾 Sample Housing Data", df.head())
+# Load the trained model
+model = joblib.load("model.pkl")
 
-df['mainroad'] = df['mainroad'].map({'yes': 1, 'no': 0})
-df['guestroom'] = df['guestroom'].map({'yes': 1, 'no': 0})
-df['basement'] = df['basement'].map({'yes': 1, 'no': 0})
-df['hotwaterheating'] = df['hotwaterheating'].map({'yes': 1, 'no': 0})
-df['airconditioning'] = df['airconditioning'].map({'yes': 1, 'no': 0})
+# Define Regions and Cities
+regions = {
+    'North': ['Delhi', 'Gurgaon', 'Noida', 'Chandigarh', 'Lucknow'],
+    'South': ['Bangalore', 'Hyderabad', 'Chennai', 'Cochin', 'Vizag'],
+    'East': ['Kolkata', 'Bhubaneswar', 'Patna', 'Ranchi', 'Guwahati'],
+    'West': ['Mumbai', 'Pune', 'Ahmedabad', 'Jaipur', 'Surat'],
+    'Central': ['Bhopal', 'Nagpur', 'Indore', 'Raipur', 'Jabalpur'],
+    'Other': ['Shimla', 'Dehradun', 'Goa', 'Varanasi', 'Agra']
+}
 
-X = df.drop('price', axis=1)
-y = df['price']
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# App title
+st.set_page_config(page_title="🏠 House Price Predictor", layout="centered")
+st.title("🏠 House Price Predictor")
 
-model = LinearRegression()
-model.fit(X_train, y_train)
+# Location selection
+st.subheader("📍 Select Location")
+selected_region = st.selectbox("Select Region", list(regions.keys()))
+selected_city = st.selectbox("Select City", regions[selected_region])
 
-def predict_price(area, bedrooms, bathrooms, stories, mainroad, guestroom, basement, hotwater, ac, parking):
-    input_data = np.array([[area, bedrooms, bathrooms, stories, mainroad, guestroom, basement, hotwater, ac, parking]])
-    prediction = model.predict(input_data)
-    return prediction[0]
+# Property features
+st.subheader("🏗 Property Details")
+area = st.number_input("Area (in sq ft)", min_value=1, max_value=10000, value=1000)
+bedrooms = st.selectbox("Number of Bedrooms", [1, 2, 3, 4, 5])
+bathrooms = st.selectbox("Number of Bathrooms", [1, 2, 3, 4])
+stories = st.selectbox("Number of Stories", [1, 2, 3, 4])
+mainroad = st.radio("Located on Main Road?", ["yes", "no"])
+guestroom = st.radio("Guestroom Available?", ["yes", "no"])
+basement = st.radio("Basement Present?", ["yes", "no"])
+hotwaterheating = st.radio("Hot Water Heating?", ["yes", "no"])
+airconditioning = st.radio("Air Conditioning?", ["yes", "no"])
+parking = st.selectbox("Parking Spaces", [0, 1, 2, 3])
 
-st.title("🏠 House Price Prediction App")
-st.markdown("Enter the house details to get the predicted price:")
+# Convert categorical to numeric
+def to_binary(value):
+    return 1 if value == "yes" else 0
 
-area = st.number_input("Area (sq ft)", min_value=500)
-bedrooms = st.selectbox("Bedrooms", [1, 2, 3, 4, 5])
-bathrooms = st.selectbox("Bathrooms", [1, 2, 3, 4])
-stories = st.selectbox("Stories", [1, 2, 3, 4])
-mainroad = st.radio("Main Road?", ['yes', 'no'])
-guestroom = st.radio("Guest Room?", ['yes', 'no'])
-basement = st.radio("Basement?", ['yes', 'no'])
-hotwater = st.radio("Hot Water Heating?", ['yes', 'no'])
-ac = st.radio("Air Conditioning?", ['yes', 'no'])
-parking = st.slider("Parking Spaces", 0, 3)
+input_df = pd.DataFrame({
+    'area': [area],
+    'bedrooms': [bedrooms],
+    'bathrooms': [bathrooms],
+    'stories': [stories],
+    'mainroad': [to_binary(mainroad)],
+    'guestroom': [to_binary(guestroom)],
+    'basement': [to_binary(basement)],
+    'hotwaterheating': [to_binary(hotwaterheating)],
+    'airconditioning': [to_binary(airconditioning)],
+    'parking': [parking]
+})
 
-mainroad = 1 if mainroad == 'yes' else 0
-guestroom = 1 if guestroom == 'yes' else 0
-basement = 1 if basement == 'yes' else 0
-hotwater = 1 if hotwater == 'yes' else 0
-ac = 1 if ac == 'yes' else 0
-
+# Prediction
 if st.button("Predict Price"):
-    result = predict_price(area, bedrooms, bathrooms, stories, mainroad, guestroom, basement, hotwater, ac, parking)
-    st.success(f"🏡 Estimated Price: ₹{round(result):,}")
+    prediction = model.predict(input_df)[0]
+    st.success(f"💰 Estimated Price: ₹{int(prediction):,}")
+    st.info(f"📍 Location: {selected_city}, {selected_region} region")
 
+# Footer
+st.markdown("""
+---
+Made with ❤️ by Kashish Sharma  
+[GitHub](https://github.com/kashishsharmae)
+""")
