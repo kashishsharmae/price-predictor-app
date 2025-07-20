@@ -1,13 +1,8 @@
-<<<<<<< HEAD
 streamlit
 pandas
 numpy
 scikit-learn
-joblib
-=======
-streamlit
-pandas
-numpy
-scikit-learn
-joblib
->>>>>>> 3d20f9a5bf61951406c3ea6c52521705d1417336
+xgboost
+matplotlib
+
+
