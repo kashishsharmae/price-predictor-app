@@ -1,88 +1,71 @@
-# 🏠 Price Predictor App (Streamlit)
+# 📁 Enhanced Price Predictor App with Region and 25 Expensive Cities
 
-A machine learning web app to predict house prices using key property features. Built with **Python**, **Streamlit**, and **Scikit-learn**.
+import streamlit as st
+import pandas as pd
+import numpy as np
+import joblib
 
+# Load the trained model
+model = joblib.load("model.pkl")
+
+# Define Regions and Cities
+regions = {
+    'North': ['Delhi', 'Gurgaon', 'Noida', 'Chandigarh', 'Lucknow'],
+    'South': ['Bangalore', 'Hyderabad', 'Chennai', 'Cochin', 'Vizag'],
+    'East': ['Kolkata', 'Bhubaneswar', 'Patna', 'Ranchi', 'Guwahati'],
+    'West': ['Mumbai', 'Pune', 'Ahmedabad', 'Jaipur', 'Surat'],
+    'Central': ['Bhopal', 'Nagpur', 'Indore', 'Raipur', 'Jabalpur'],
+    'Other': ['Shimla', 'Dehradun', 'Goa', 'Varanasi', 'Agra']
+}
+
+# App title
+st.set_page_config(page_title="🏠 House Price Predictor", layout="centered")
+st.title("🏠 House Price Predictor")
+
+# Location selection
+st.subheader("📍 Select Location")
+selected_region = st.selectbox("Select Region", list(regions.keys()))
+selected_city = st.selectbox("Select City", regions[selected_region])
+
+# Property features
+st.subheader("🏗 Property Details")
+area = st.number_input("Area (in sq ft)", min_value=1, max_value=10000, value=1000)
+bedrooms = st.selectbox("Number of Bedrooms", [1, 2, 3, 4, 5])
+bathrooms = st.selectbox("Number of Bathrooms", [1, 2, 3, 4])
+stories = st.selectbox("Number of Stories", [1, 2, 3, 4])
+mainroad = st.radio("Located on Main Road?", ["yes", "no"])
+guestroom = st.radio("Guestroom Available?", ["yes", "no"])
+basement = st.radio("Basement Present?", ["yes", "no"])
+hotwaterheating = st.radio("Hot Water Heating?", ["yes", "no"])
+airconditioning = st.radio("Air Conditioning?", ["yes", "no"])
+parking = st.selectbox("Parking Spaces", [0, 1, 2, 3])
+
+# Convert categorical to numeric
+def to_binary(value):
+    return 1 if value == "yes" else 0
+
+input_df = pd.DataFrame({
+    'area': [area],
+    'bedrooms': [bedrooms],
+    'bathrooms': [bathrooms],
+    'stories': [stories],
+    'mainroad': [to_binary(mainroad)],
+    'guestroom': [to_binary(guestroom)],
+    'basement': [to_binary(basement)],
+    'hotwaterheating': [to_binary(hotwaterheating)],
+    'airconditioning': [to_binary(airconditioning)],
+    'parking': [parking]
+})
+
+# Prediction
+if st.button("Predict Price"):
+    prediction = model.predict(input_df)[0]
+    st.success(f"💰 Estimated Price: ₹{int(prediction):,}")
+    st.info(f"📍 Location: {selected_city}, {selected_region} region")
+
+# Footer
+st.markdown("""
 ---
-
-## 📌 Features
-- Predicts house prices based on:
-  - Area (sq ft)
-  - Bedrooms, Bathrooms, Stories
-  - Road access, Guestroom, Basement
-  - Hot water heating, Air Conditioning, Parking
-- ✅ Added **Region** and **Top 25 Expensive Cities** selection
-- Simple, responsive user interface built using **Streamlit**
-
----
-
-## 📁 Folder Structure
-
-```
-📦 price-predictor-app/
-├── app.py                # Streamlit app UI
-├── train_model.py        # Model training script
-├── model.pkl             # Trained ML model
-├── requirements.txt      # Required libraries
-├── README.md             # Project documentation
-└── housing.csv           # Dataset (you must provide this file)
-```
-
----
-
-## 🚀 How to Run the App Locally (VS Code or Terminal)
-
-### 1. Clone the repo or download ZIP
-```bash
-git clone https://github.com/your-username/price-predictor-app.git
-cd price-predictor-app
-```
-
-### 2. (Optional) Create Virtual Environment
-```bash
-python -m venv venv
-venv\Scripts\activate    # Windows
-```
-
-### 3. Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Train the Model (if not done)
-```bash
-python train_model.py
-```
-
-### 5. Run the Streamlit App
-```bash
-streamlit run app.py
-```
-
-Go to: [http://localhost:8501](http://localhost:8501) in your browser.
-
----
-
-## 🌐 Deployed App
-Visit the hosted version:  
-👉 [https://prices-predictor-app.streamlit.app](https://prices-predictor-app.streamlit.app)
-
----
-
-## 🧠 Tech Stack
-- Python 3.10+
-- Pandas, NumPy
-- Scikit-learn
-- Streamlit
-- Joblib
-
----
-
-## ✍️ Author
-**Kashish Sharma**  
-🔗 GitHub: [@kashishsharmae](https://github.com/kashishsharmae)
-
----
-
-## 📄 License
-This project is open-source and free to use for educational purposes.
-
+Made with ❤️ by Kashish Sharma  
+[GitHub](https://github.com/kashishsharmae)
+""")
