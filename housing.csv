@@ -1,6 +1,15 @@
+<<<<<<< HEAD
 area,bedrooms,bathrooms,stories,mainroad,guestroom,basement,hotwaterheating,airconditioning,parking,price
 7420,4,2,3,yes,no,no,no,yes,3,9000000
 8960,4,4,4,yes,yes,yes,yes,yes,2,12000000
 9960,3,2,2,no,no,yes,no,yes,2,7500000
 7500,2,1,1,yes,no,no,no,no,0,4200000
 7420,3,2,3,no,no,no,yes,yes,1,7300000
+=======
+area,bedrooms,bathrooms,stories,mainroad,guestroom,basement,hotwaterheating,airconditioning,parking,price
+7420,4,2,3,yes,no,no,no,yes,3,9000000
+8960,4,4,4,yes,yes,yes,yes,yes,2,12000000
+9960,3,2,2,no,no,yes,no,yes,2,7500000
+7500,2,1,1,yes,no,no,no,no,0,4200000
+7420,3,2,3,no,no,no,yes,yes,1,7300000
+>>>>>>> 3d20f9a5bf61951406c3ea6c52521705d1417336
