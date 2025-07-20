@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 🏠 House Price Predictor App
 
 A machine learning-based web application that predicts the **price of a house** using user-defined features like area, number of bedrooms, bathrooms, and other amenities. Built using **Python**, **Streamlit**, and **scikit-learn**, this project demonstrates a complete ML pipeline: data preparation, model training, and frontend deployment.
@@ -39,7 +38,7 @@ A machine learning-based web application that predicts the **price of a house** 
 
 ✅ Linear Regression ML model trained on a sample dataset  
 ✅ Input validation with dropdowns, slide
-=======
+
 # 🏠 House Price Predictor App
 
 A machine learning-based web application that predicts the **price of a house** using user-defined features like area, number of bedrooms, bathrooms, and other amenities. Built using **Python**, **Streamlit**, and **scikit-learn**, this project demonstrates a complete ML pipeline: data preparation, model training, and frontend deployment.
@@ -80,4 +79,9 @@ A machine learning-based web application that predicts the **price of a house** 
 
 ✅ Linear Regression ML model trained on a sample dataset  
 ✅ Input validation with dropdowns, slide
->>>>>>> 3d20f9a5bf61951406c3ea6c52521705d1417336
+
+
+## 👤 Author
+
+**Kashish Sharma**  
+🔗 [GitHub](https://github.com/kashishsharmae)
